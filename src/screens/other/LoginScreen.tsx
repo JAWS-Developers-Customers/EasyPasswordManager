@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import './AuthScreen.css';
-//import { login } from '../../api/auth';
+import { login } from '../../api/auth';
 //import { DASHBOARD_DEV_URL, DASHBOARD_PROD_URL, DASHBOARD_LOCAL_URL, INVITATION } from '../../config/config';
 import autoAnimate from '@formkit/auto-animate';
 import { useNotification } from '../../contexts/notificationContext';
+import { useAuth } from '../../contexts/authContext';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const { addNotification } = useNotification();
@@ -16,6 +18,8 @@ const Login = () => {
     const queryString = window.location.search;
     const params = new URLSearchParams(queryString);
 
+    const auth = useAuth();
+    const nav = useNavigate();
     const formAnimate = useRef(null);
     const loaderAnimate = useRef(null);
 
@@ -29,14 +33,10 @@ const Login = () => {
         event.preventDefault();
         setShowForm(false);
         setLoading(true);
-        /*login(email, password).then(({ token, session }) => {
+        login(username, password).then(({ token, session }) => {
             switch (token.error_code) {
                 case "1.3.0":
-                    if (redirect === INVITATION) {
-                        window.location.href = `${redirect}/?token=${token.data.token}&session=${session}&invitation_token=${invitationLink}`;
-                    } else {
-                        window.location.href = `${redirect}/auth?token=${token.data.token}&session=${session}`;
-                    }
+                    nav("/auth?token=" + token.data.token + "&session=" + session.data.session_id);
                     break;
                 case "1.3.2.3":
                     addNotification("Error", "Invalid email or password", "error");
@@ -54,7 +54,7 @@ const Login = () => {
                     setLoading(false);
                     break;
             }
-        });*/
+        });
     };
 
     return (
@@ -62,7 +62,7 @@ const Login = () => {
             <div className="container" ref={formAnimate}>
                 {showForm &&
                     <div className="box">
-                        <img src="https://assets.simplevote.ch/icon.png" alt="Logo" className="logo" />
+                        {/*<img src="https://assets.simplevote.ch/icon.png" alt="Logo" className="logo" />*/}
                         <h2 className="heading">Login</h2>
                         <form className={`form`} onSubmit={handleSubmit}>
                             <input type="text" placeholder="Username" required className="input" onChange={(event) => setUsername(event.target.value)} />

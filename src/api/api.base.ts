@@ -1,9 +1,9 @@
-import { API_BASE } from "../config/config";
+import { CONFIG } from "../config/config";
 import { APIResponse } from "../types/api.types";
 export var lastExecutiondata: APIResponse;
 export const APIQuery = async (auth: { token: string, session_id: string }, path: string, method: 'POST' | 'GET', headers_values: { name: string, value: string }[], postData?: any): Promise<APIResponse> => {
     try {
-        const response = await fetch(`${API_BASE}${path}`, {
+        const response = await fetch(`${CONFIG.API_URL}${path}`, {
             method: method,
             headers: {
                 'Content-Type': 'application/json',
