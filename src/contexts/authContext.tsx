@@ -1,8 +1,5 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-import { login as loginApi } from '../api/auth';
-//import { LoadingScreenGlobal } from '../pages/other/LoadingScreen';
-import { useNotification } from './notificationContext';
 import { AuthContextType, Association, User } from '../types/authContext.types';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,7 +20,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [validatingSession, setValidatingSession] = useState(true);
     const [associationRole, setAssociationRole] = useState<string>("");
 
-    const { addNotification } = useNotification();
 
     const [user, setUser] = useState<User>({
         email: "s.ceschi@dio.com",
@@ -37,8 +33,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         const savedToken = window.localStorage.getItem('token');
-        const savedSession = window.localStorage.getItem('session');
-        const savedAssociation = window.localStorage.getItem('association_id');
 
         // Controllo se ci sono informazioni salvate
         const loginF = async () => {
@@ -70,7 +64,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         loginF();
     }, []);
 
-    const login = (newToken: string, newSession: string, association_id: number) => {
+    const saveSession = (newToken: string, newSession: string) => {
         // Memorizza i dettagli della sessione nel localStorage
         /*window.localStorage.setItem('token', newToken);
         window.localStorage.setItem('session', newSession);
@@ -83,10 +77,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         // Redirigi alla home page o ad una pagina protetta
         window.location.href = "/";*/
-    };
-
-    const changeAssociation = () => {
-        window.location.href = `/auth?token=${token}&session=${session_id}`;
     };
 
     const logout = () => {
@@ -104,7 +94,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (validatingSession) return <>Loading</>;
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout, token, session_id, user, association, changeAssociation, associationRole, validatingSession, auth: { token, session_id } }}>
+        <AuthContext.Provider value={{ isAuthenticated, login: saveSession, logout, token, session_id, user, validatingSession, auth: { token, session_id } }}>
             {children}
         </AuthContext.Provider>
     );

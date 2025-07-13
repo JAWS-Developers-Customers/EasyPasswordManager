@@ -27,3 +27,5 @@ export type APIResponse = {
      */
     data?: any
 }
+
+export const EMPTY_CRED = { token: "", session_id: ""}

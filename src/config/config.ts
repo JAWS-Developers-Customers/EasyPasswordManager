@@ -1,1 +1,4 @@
-export const API_BASE = "/php/"
+export const CONFIG = {
+    "BASE_URL": "http://localhost",
+    "API_URL": "http://localhost/api",
+}
