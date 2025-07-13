@@ -62,7 +62,6 @@ const Login = () => {
             <div className="container" ref={formAnimate}>
                 {showForm &&
                     <div className="box">
-                        <img src="https://assets.simplevote.ch/icon.png" alt="Logo" className="logo" />
                         <h2 className="heading">Login</h2>
                         <form className={`form`} onSubmit={handleSubmit}>
                             <input type="text" placeholder="Username" required className="input" onChange={(event) => setUsername(event.target.value)} />
